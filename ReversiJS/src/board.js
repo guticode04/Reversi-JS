@@ -9,6 +9,19 @@ if (typeof window === 'undefined'){
  * and two white pieces at [3, 3] and [4, 4]
  */
 function _makeGrid () {
+  // create empty array to fiil with rows
+  const grid = [];
+  // loop to create rows
+  for( let i = 0; i < 8; i++ ) {
+    let row = new Array(8);
+    grid.push(row);
+  }
+
+  // add pieces to board
+  grid[3][3] = new Piece("white");
+  grid[3][4] = new Piece("black");
+  grid[4][3] = new Piece("black");
+  grid[4][4] = new Piece("white");
 }
 
 /**
