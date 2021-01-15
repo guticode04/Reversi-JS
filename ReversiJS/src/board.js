@@ -145,15 +145,18 @@ Board.prototype.validMove = function (pos, color) {
  * Throws an error if the position represents an invalid move.
  */
 Board.prototype.placePiece = function (pos, color) {
+  // if there is no valid move throw error
   if ( !this.validMove(pos,color) ) {
     throw new Error('Invalid move!');
   }
 
+  // fill new array with positions that can be flipped
   let positionsToFlip = [];
   for ( let i = 0; i < Board.DIRS.length; i++ ) {
     positionsToFlip = positionsToFlip.concat( this._positionsToFlip(pos, color, Board.DIRS[i]));
   }
 
+  // go through positions and flip
   for ( let j = 0; j < positionsToFlip.length; j++ ) {
     this.getPiece(positionsToFlip[j]).flip();
   }
@@ -166,12 +169,28 @@ Board.prototype.placePiece = function (pos, color) {
  * the Board for a given color.
  */
 Board.prototype.validMoves = function (color) {
+
+  const listOfValidMoves = [];
+
+  // fill new array with valid moves
+  for ( let i = 0; i < 8; i++ ) {
+    for (let j = 0; j < 8; j++) {
+      if ( this.validMove( [i, j], color )) {
+        listOfValidMoves.push([i, j]);
+      }
+    }
+  }
+
+  // return new array
+  return listOfValidMoves;
 };
 
 /**
  * Checks if there are any valid moves for the given color.
  */
 Board.prototype.hasMove = function (color) {
+  // if validMoves is not empty then it has a move
+  return this.validMoves(color).length !== 0;
 };
 
 
@@ -181,6 +200,9 @@ Board.prototype.hasMove = function (color) {
  * the black player are out of moves.
  */
 Board.prototype.isOver = function () {
+
+  return ( !this.hasMove("black") ) && ( !this.hasMove("white") );
+
 };
 
 
@@ -190,6 +212,17 @@ Board.prototype.isOver = function () {
  * Prints a string representation of the Board to the console.
  */
 Board.prototype.print = function () {
+  for (let i = 0; i < 8; i++) {
+    let row = " " + i + " |";
+
+    for (let j = 0; j < 8; j++) {
+      let pos = [i, j];
+      row +=
+        (this.getPiece(pos) ? this.getPiece(pos).toString() : ".");
+    }
+
+    console.log(row);
+  }
 };
 
 
